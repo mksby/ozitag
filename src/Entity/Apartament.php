@@ -47,6 +47,11 @@ class Apartament
      */
     private $description;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $rooms;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -120,6 +125,18 @@ class Apartament
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getRooms(): ?int
+    {
+        return $this->rooms;
+    }
+
+    public function setRooms(int $rooms): self
+    {
+        $this->rooms = $rooms;
 
         return $this;
     }
