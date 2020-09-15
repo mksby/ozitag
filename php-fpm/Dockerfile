@@ -2,7 +2,7 @@ FROM php:7.4-fpm-alpine
 
 RUN apk update \
     && apk add  --no-cache git mysql-client curl libmcrypt libmcrypt-dev openssh-client icu-dev \
-    libxml2-dev freetype-dev libpng-dev libjpeg-turbo-dev g++ make autoconf libzip-dev acl \
+    libxml2-dev freetype-dev libpng-dev libjpeg-turbo-dev g++ make autoconf libzip-dev acl php-cli \
     && docker-php-source extract \
     && pecl install xdebug redis \
     && docker-php-ext-enable xdebug redis \
@@ -13,13 +13,13 @@ RUN apk update \
     && echo "xdebug.remote_port=10000" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.remote_handler=dbgp" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.remote_connect_back=0" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    #&& curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && rm -rf /tmp/*
-
-RUN su usermod --uid 1000 www-data
 
 CMD ["php-fpm", "-F"]
 
-WORKDIR /var/www/web
+WORKDIR /var/www/api
 
-EXPOSE 9000
+RUN addgroup -g 1000 -S www
+RUN adduser -u 1000 -S www -G www
+
+USER www

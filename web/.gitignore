@@ -1,17 +1,23 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-###> symfony/framework-bundle ###
-/.env.local
-/.env.local.php
-/.env.*.local
-/config/secrets/prod/prod.decrypt.private.php
-/public/bundles/
-/src/.preload.php
-/var/
-/vendor/
-###< symfony/framework-bundle ###
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
 
-###> symfony/phpunit-bridge ###
-.phpunit
-.phpunit.result.cache
-/phpunit.xml
-###< symfony/phpunit-bridge ###
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

@@ -1,21 +1,37 @@
 version: '2'
 services:
-    php:
-        build: ./php-fpm
+    web:
+        build: ./node
         volumes:
             - ./web:/var/www/web
-            - ./php-fpm/php.ini:/usr/local/etc/php/php.ini
-        depends_on:
-            - mysql
-    web:
+        ports:
+            - "8889:3000"
+        stdin_open: true
+    api:
         image: nginx:latest
         ports:
             - "8888:80"
         volumes:
-            - ./web:/var/www/web
-            - ./nginx/web.conf:/etc/nginx/conf.d/default.conf
+            - ./api:/var/www/api
+            - ./nginx/api.conf:/etc/nginx/conf.d/default.conf
         depends_on:
             - php
+    console:
+        image: nginx:latest
+        ports:
+            - "8887:80"
+        volumes:
+            - ./console:/var/www/console
+            - ./nginx/api.conf:/etc/nginx/conf.d/default.conf
+        depends_on:
+            - php
+    php:
+        build: ./php-fpm
+        volumes:
+            - ./api:/var/www/api
+            - ./php-fpm/php.ini:/usr/local/etc/php/php.ini
+        depends_on:
+            - mysql
     mysql:
         image: mysql:5.6
         environment:
