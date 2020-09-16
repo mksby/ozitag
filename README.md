@@ -1,7 +1,12 @@
-## Run realt.by parser
+## Build
 
 ```
 docker-compose up --build
+```
+
+## Run realt.by parser
+
+```
 docker container exec -it php /bin/sh
 sh console/run.sh
 ```

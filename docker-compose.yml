@@ -1,7 +1,7 @@
 version: '2'
 services:
     web:
-        build: ./node
+        build: ./config/node
         volumes:
             - ./web:/var/www/web
         ports:
@@ -13,7 +13,7 @@ services:
             - "8888:80"
         volumes:
             - ./api:/var/www/api
-            - ./nginx/api.conf:/etc/nginx/conf.d/default.conf
+            - ./config/nginx/api.conf:/etc/nginx/conf.d/default.conf
         depends_on:
             - php
     console:
@@ -22,12 +22,12 @@ services:
             - "8887:80"
         volumes:
             - ./console:/var/www/console
-            - ./nginx/api.conf:/etc/nginx/conf.d/default.conf
+            - ./config/nginx/api.conf:/etc/nginx/conf.d/default.conf
         depends_on:
             - php
     php:
         container_name: php
-        build: ./php-fpm
+        build: ./config/php-fpm
         volumes:
             - ./api:/var/www/api
             - ./console:/var/www/console
