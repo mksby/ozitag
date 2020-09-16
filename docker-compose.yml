@@ -26,9 +26,11 @@ services:
         depends_on:
             - php
     php:
+        container_name: php
         build: ./php-fpm
         volumes:
             - ./api:/var/www/api
+            - ./console:/var/www/console
             - ./php-fpm/php.ini:/usr/local/etc/php/php.ini
         depends_on:
             - mysql

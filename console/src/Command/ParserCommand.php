@@ -11,8 +11,19 @@ use Symfony\Component\Console\Helper\ProgressBar;
 use Amp\Loop;
 use Amp\Promise;
 use App\Entity\Apartament;
+use Amp\MultiReasonException;
 
 use function Amp\ParallelFunctions\parallelMap;
+
+function printErrors(\Throwable $e) {
+    if ($e instanceof MultiReasonException) {
+        foreach ($e->getReasons() as $reason) {
+            printErrors($reason);
+        }
+    }
+
+    echo $e;
+}
 
 class ParserCommand extends Command
 {
@@ -75,25 +86,29 @@ class ParserCommand extends Command
             $max_page = (int)$last_link->text() - 1;
         }
 
-        $apartamentsList = Promise\wait(parallelMap(range(0, $max_page), function ($page) use ($url, $count) {
-            $crawler = new Crawler(file_get_contents("$url&page=$page"));
+        try {
+            $apartamentsList = Promise\wait(parallelMap(range(0, $max_page), function ($page) use ($url, $count) {
+                $crawler = new Crawler(file_get_contents("$url&page=$page"));
 
-            $result = $crawler->filter('.bd-item')->each(function($item) use ($count) {
-                $price = explode("руб/сутки", $item->filter('.price-byr')->text());
+                $result = $crawler->filter('.bd-item')->each(function($item) use ($count) {
+                    $price = explode("руб/сутки", $item->filter('.price-byr')->text());
 
-                return [
-                    "title" => $item->filter('.title .media-body')->text(),
-                    "image" => $item->filter('img')->attr('data-original'),
-                    "updated_at" => \DateTime::createFromFormat('d.m.Y', $item->filter('.fa-clock-o')->parents()->text()),
-                    "price" => count($price) > 1 ? (int)$price[0] : null,
-                    "contact" => $item->filter('[data-full]')->attr('data-full'),
-                    "description" => $item->filter('.bd-item-right-center')->text(),
-                    "rooms" => $count
-                ];
-            });
+                    return [
+                        "title" => $item->filter('.title .media-body')->text(),
+                        "image" => $item->filter('img')->attr('data-original'),
+                        "updated_at" => \DateTime::createFromFormat('d.m.Y', $item->filter('.fa-clock-o')->parents()->text()),
+                        "price" => count($price) > 1 ? (int)$price[0] : null,
+                        "contact" => $item->filter('[data-full]')->attr('data-full'),
+                        "description" => $item->filter('.bd-item-right-center')->text(),
+                        "rooms" => $count
+                    ];
+                });
 
-            return $result;
-        }));
+                return $result;
+            }));
+        } catch (MultiReasonException $e) {
+            printErrors($e);
+        }
 
 
         $apartamentsList = call_user_func_array('array_merge', $apartamentsList);
