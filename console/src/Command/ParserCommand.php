@@ -31,14 +31,14 @@ class ParserCommand extends Command
     private $em;
 
     const ROOMS_URL = [
-        "ONE" => [1, "https://realt.by/rent/flat-for-day/?search=eJwrys%2FPLVY1dUpVNXUBUoZAytZQLb44taS0AMgvSk2OL0gtii9ITAepsDU1QMhlgATM00xN0gyNLEyTLJNSE5NMDQ3MjYyMTZPNLS1SkixTLQCDVhxN"],
-        "TWO" => [2, "https://realt.by/rent/flat-for-day/?search=eJwrys%2FPLVY1dUpVNXUBUoZAytZILb44taS0AMgvSk2OL0gtii9ITAepsDU1QMhlgATM00xN0gyNLEyTLJNSE5NMDQ3MjYyMTZPNLS1SkixTLQCDohxO"],
-        "THREE" => [3, "https://realt.by/rent/flat-for-day/?search=eJwrys%2FPLVY1dUpVNXUBUoZAytZYLb44taS0AMgvSk2OL0gtii9ITAepsDU1QMhlgATM00xN0gyNLEyTLJNSE5NMDQ3MjYyMTZPNLS1SkixTLQCD7hxP"],
-        "FOUR" => [4, "https://realt.by/rent/flat-for-day/?search=eJwrys%2FPLVY1dUpVNXUBUoZAytZELb44taS0AMgvSk2OL0gtii9ITAepsDU1QMhlgATM00xN0gyNLEyTLJNSE5NMDQ3MjYyMTZPNLS1SkixTLQCEOhxQ"],
-        "FIVE" => [5, "https://realt.by/rent/flat-for-day/?search=eJwrys%2FPLVY1dUpVNXUBUoZAytZULb44taS0AMgvSk2OL0gtii9ITE8FSxkg5DJAAuZppiZphkYWpkmWSamJSaaGBuZGRsamyeaWFilJlqkWAISGHFE%3D"],
-        "SIX" => [6, "https://realt.by/rent/flat-for-day/?search=eJwrys%2FPLVY1dUpVNXUBUoZAytZMLb44taS0AMgvSk2OL0gtii9ITAepsDU1QMhlgATM00xN0gyNLEyTLJNSE5NMDQ3MjYyMTZPNLS1SkixTLQCE0hxS"],
-        "SEVEN" => [7, "https://realt.by/rent/flat-for-day/?search=eJwrys%2FPLVY1dUpVNXUBUoZAytZcLb44taS0AMgvSk2OL0gtii9ITAepsDU1QMhlgNWmmZqkGRpZmCZZJqUmJpkaGpgbGRmbJptbWqQkWaZaAACFHhxT"],
-        "EIGHT" => [8, "https://realt.by/rent/flat-for-day/?search=eJwrys%2FPLVY1dUpVNXUBUoZAytZCLb44taS0AMgvSk2OL0gtii9ITAepsDU1QMhlgATM00xN0gyNLEyTLJNSE5NMDQ3MjYyMTZPNLS1SkixTLQCFahxU"]
+        "ONE" => [1, "https://realt.by/rent/flat-for-day/?search=eJwrys%2FPLVY1dUpVNXUBUoZAytZQLb44taS0AMgvSk2OL0gtii9ITAepsDU1QMhlgATMU00MjYyMzE2STQxN0gxSk8zNzFItUwwMjAzMzEwtTQF4kRt9"],
+        "TWO" => [2, "https://realt.by/rent/flat-for-day/?search=eJwrys%2FPLVY1dUpVNXUBUoZAytZILb44taS0AMgvSk2OL0gtii9ITAepsDU1QMhlgATMU00MjYyMzE2STQxN0gxSk8zNzFItUwwMjAzMzEwtTQF43Rt%2B"],
+        "THREE" => [3, "https://realt.by/rent/flat-for-day/?search=eJwrys%2FPLVY1dUpVNXUBUoZAytZYLb44taS0AMgvSk2OL0gtii9ITAepsDU1QMhlgATMU00MjYyMzE2STQxN0gxSk8zNzFItUwwMjAzMzEwtTQF5KRt%2F"],
+        "FOUR" => [4, "https://realt.by/rent/flat-for-day/?search=eJwrys%2FPLVY1dUpVNXUBUoZAytZELb44taS0AMgvSk2OL0gtii9ITAepsDU1QMhlgATMU00MjYyMzE2STQxN0gxSk8zNzFItUwwMjAzMzEwtTQF5dRuA"],
+        "FIVE" => [5, "https://realt.by/rent/flat-for-day/?search=eJwrys%2FPLVY1dUpVNXUBUoZAytZULb44taS0AMgvSk2OL0gtii9ITE8FSxkg5DJAAuapJoZGRkbmJskmhiZpBqlJ5mZmqZYpBgZGBmZmppamAHnBG4E%3D"],
+        "SIX" => [6, "https://realt.by/rent/flat-for-day/?search=eJwrys%2FPLVY1dUpVNXUBUoZAytZMLb44taS0AMgvSk2OL0gtii9ITAepsDU1QMhlgATMU00MjYyMzE2STQxN0gxSk8zNzFItUwwMjAzMzEwtTQF6DRuC"],
+        "SEVEN" => [7, "https://realt.by/rent/flat-for-day/?search=eJxFijEOgCAMAF%2BDc2naEgYW4z%2BIYtXFQED%2FL7o4XS53NeezGR7V8NRhO4IbYtPrLt2rpli0xjLv7xEY%2FnZ8r5JFREeJLG2gixNRvwIgiLDnB3pZG4M%3D"],
+        "EIGHT" => [8, "https://realt.by/rent/flat-for-day/?search=eJwrys%2FPLVY1dUpVNXUBUoZAytZCLb44taS0AMgvSk2OL0gtii9ITAepsDU1QMhlgATMU00MjYyMzE2STQxN0gxSk8zNzFItUwwMjAzMzEwtTQF6pRuE"]
     ];
 
     public function __construct(EntityManagerInterface $em)
@@ -109,7 +109,6 @@ class ParserCommand extends Command
         } catch (MultiReasonException $e) {
             printErrors($e);
         }
-
 
         $apartamentsList = call_user_func_array('array_merge', $apartamentsList);
 
