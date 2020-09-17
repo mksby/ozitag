@@ -21,7 +21,11 @@ class ApartamentRepository extends ServiceEntityRepository
 
     public function findByQuery($query)
     {
-        ['rooms' => $rooms, 'price_from' => $price_from, 'price_to' => $price_to] = $query;
+        [
+            'rooms' => $rooms,
+            'price_from' => $price_from,
+            'price_to' => $price_to
+        ] = $query;
 
         $query = $this->createQueryBuilder('a');
 
@@ -39,6 +43,8 @@ class ApartamentRepository extends ServiceEntityRepository
         } else if (!empty($price_to)) {
             $query->andWhere('a.price <= :price')->setParameter('price', $price_to);
         };
+
+        $query->orderBy('a.id', 'ASC');
 
         return $query->getQuery()->getResult();
     }

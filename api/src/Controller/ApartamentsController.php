@@ -26,6 +26,17 @@ class ApartamentsController extends AbstractController
             'price_to' => $request->query->get('price_to')
         ]);
 
-        return $this->json($models);
+        $page = (int)$request->query->get('page') ?: 1;
+        $page_size = 20;
+
+        $slice = array_slice($models, $page_size * ($page - 1), $page_size);
+
+        return $this->json([
+            'total' => count($models),
+            'page' => $page,
+            'pages' => ceil(count($models) / $page_size),
+            'page_size' => $page_size,
+            'items' => $slice
+        ]);
     }
 }
