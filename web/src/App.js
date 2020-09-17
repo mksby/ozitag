@@ -1,26 +1,36 @@
 import React from 'react';
-import logo from './logo.svg';
+import { connect } from 'react-redux';
+import {ListGroup, Container, Row, Col, Button, Card} from 'react-bootstrap';
+import {Container as SearchContainer} from './search/container';
+import {Container as ApartamentsContainer} from './apartaments/container';
+import {Container as PaginationContainer} from './pagination/container';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="App pt-5">
+      <Container>
+        <h1 className="mb-5">Realt.by apartaments</h1>
+        <SearchContainer />
+        <PaginationContainer />
+        <ApartamentsContainer />
+        <div className="mt-3">
+          <PaginationContainer />
+        </div>
+      </Container>
     </div>
   );
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {};
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    handleIncrementClick: () => dispatch({ type: 'INCREMENT' })
+  }
+};
+
+export default App = connect(mapStateToProps, mapDispatchToProps)(App);
