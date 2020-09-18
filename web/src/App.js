@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {Container,} from 'react-bootstrap';
-import {Container as SearchContainer} from './search/container';
-import {Container as ApartamentsContainer} from './apartaments/container';
-import {Container as PaginationContainer} from './pagination/container';
+import {Component as Search} from './search/component';
+import {Container as Apartaments} from './apartaments/container';
+import {Container as Pagination} from './pagination/container';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
@@ -12,11 +12,11 @@ function App() {
     <div className="App pt-5">
       <Container>
         <h1 className="mb-5">Realt.by apartaments</h1>
-        <SearchContainer />
-        <PaginationContainer />
-        <ApartamentsContainer />
+        <Search />
+        <Pagination />
+        <Apartaments />
         <div className="mt-3">
-          <PaginationContainer />
+          <Pagination />
         </div>
       </Container>
     </div>

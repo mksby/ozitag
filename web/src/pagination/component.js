@@ -38,7 +38,7 @@ export const Component = ({ status, apartaments, onChangePage }) => {
             <Pagination size="sm" className="d-flex justify-content-center">
                 <Pagination.First onClick={() => onChangePage(1)} />
                 <Pagination.Prev onClick={() => onChangePage((apartaments.page - 1) || 1)} />
-                {console.log([apartaments.page, apartaments.pages]), pages(apartaments.page, apartaments.pages).map((step, i) => (
+                {pages(apartaments.page, apartaments.pages).map((step, i) => (
                     (step && <Pagination.Item key={i} active={step === apartaments.page} onClick={() => step !== apartaments.page && onChangePage(step)}>{step}</Pagination.Item>) ||
                     (!step && <Pagination.Ellipsis key={i} />)
                 ))}
