@@ -52,6 +52,11 @@ class Apartament
      */
     private $rooms;
 
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $realtby_id;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -137,6 +142,18 @@ class Apartament
     public function setRooms(int $rooms): self
     {
         $this->rooms = $rooms;
+
+        return $this;
+    }
+
+    public function getRealtbyId(): ?string
+    {
+        return $this->realtby_id;
+    }
+
+    public function setRealtbyId(string $realtby_id): self
+    {
+        $this->realtby_id = $realtby_id;
 
         return $this;
     }

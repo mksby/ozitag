@@ -8,9 +8,9 @@ use Symfony\Component\DomCrawler\Crawler;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
 
-use Amp\Loop;
-use Amp\Promise;
 use App\Entity\Apartament;
+
+use Amp\Promise;
 use Amp\MultiReasonException;
 
 use function Amp\ParallelFunctions\parallelMap;
@@ -29,6 +29,7 @@ class ParserCommand extends Command
 {
     protected static $defaultName = 'app:realt.by';
     private $em;
+    private $er;
 
     const ROOMS_URL = [
         "ONE" => [1, "https://realt.by/rent/flat-for-day/?search=eJwrys%2FPLVY1dUpVNXUBUoZAytZQLb44taS0AMgvSk2OL0gtii9ITAepsDU1QMhlgATM00xN0gyNLEyTLJNSE5NMDQ3MjYyMTZPNLS1SkixTLQCDVhxN"],
@@ -44,6 +45,8 @@ class ParserCommand extends Command
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
+        $this->er = $this->em->getRepository(Apartament::class);
+
         parent::__construct();
     }
 
@@ -86,6 +89,8 @@ class ParserCommand extends Command
             $max_page = (int)$last_link->text() - 1;
         }
 
+        $apartamentsList = [];
+
         try {
             $apartamentsList = Promise\wait(parallelMap(range(0, $max_page), function ($page) use ($url, $count) {
                 $crawler = new Crawler(file_get_contents("$url&page=$page"));
@@ -94,6 +99,7 @@ class ParserCommand extends Command
                     $price = explode("руб/сутки", $item->filter('.price-byr')->text());
 
                     return [
+                        "realtby_id" => array_reverse(explode("/", $item->filter('a')->first()->attr('href')))[1],
                         "title" => $item->filter('.title .media-body')->text(),
                         "image" => $item->filter('img')->attr('data-original'),
                         "updated_at" => \DateTime::createFromFormat('d.m.Y', $item->filter('.fa-clock-o')->parents()->text()),
@@ -115,23 +121,31 @@ class ParserCommand extends Command
         $this->em->beginTransaction();
 
         try {
+            $saved = [];
+
             foreach($apartamentsList as $apartamentsItem)
             {
-                $apartament = new Apartament();
-                $apartament->setTitle($apartamentsItem['title']);
-                $apartament->setImage($apartamentsItem['image']);
-                $apartament->setUpdatedAt($apartamentsItem['updated_at']);
-                $apartament->setPrice($apartamentsItem['price']);
-                $apartament->setContact($apartamentsItem['contact']);
-                $apartament->setDescription($apartamentsItem['description']);
-                $apartament->setRooms($apartamentsItem['rooms']);
-                $this->em->persist($apartament);
+                if ($this->er->count(['realtby_id' => $apartamentsItem['realtby_id']]) === 0) {
+                    $apartament = new Apartament();
+                    $apartament->setTitle($apartamentsItem['title']);
+                    $apartament->setImage($apartamentsItem['image']);
+                    $apartament->setUpdatedAt($apartamentsItem['updated_at']);
+                    $apartament->setPrice($apartamentsItem['price']);
+                    $apartament->setContact($apartamentsItem['contact']);
+                    $apartament->setDescription($apartamentsItem['description']);
+                    $apartament->setRooms($apartamentsItem['rooms']);
+                    $apartament->setRealtbyId($apartamentsItem['realtby_id']);
+
+                    $saved[] = $apartament;
+
+                    $this->em->persist($apartament);
+                }
             }
 
             $this->em->flush();
             $this->em->commit();
 
-            return $apartamentsList;
+            return $saved;
         } catch (\Exception $exception) {
             $this->em->rollBack();
             throw $exception;
