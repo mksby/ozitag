@@ -42,6 +42,12 @@ export const searchReducer = function (state = defaultState, action) {
                 page: action.payload.page,
                 loading: false
             };
+        case "SEARCH_FULFILLED":
+            return {
+                ...state,
+                error: action.payload,
+                loading: false
+            };
         default:
             return state;
     }

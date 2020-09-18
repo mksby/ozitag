@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {ListGroup, Container, Row, Col, Button, Card} from 'react-bootstrap';
+import {Container,} from 'react-bootstrap';
 import {Container as SearchContainer} from './search/container';
 import {Container as ApartamentsContainer} from './apartaments/container';
 import {Container as PaginationContainer} from './pagination/container';

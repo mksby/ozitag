@@ -8,7 +8,9 @@ export const getApartaments = () => async (dispatch, getState) => {
         dispatch({ type: 'APARTAMENTS_PENDING' });
         dispatch({ type: 'SEARCH_PENDING' });
 
-        const response = await axios.get(`http://192.168.99.100:8888/api/apartaments?price_from=${price_from}&price_to=${price_to}&rooms=${rooms}&page=${page}`)
+        const response = await axios.get(`${process.env.REACT_APP_API_GATEWAY}apartaments`, {
+            params: { price_from, price_to, rooms, page }
+        })
 
         dispatch({
             type: 'APARTAMENTS_FULFILLED',
@@ -23,7 +25,12 @@ export const getApartaments = () => async (dispatch, getState) => {
         dispatch({
             type: 'APARTAMENTS_REJECTED',
             payload: error,
-        })
+        });
+
+        dispatch({
+            type: 'SEARCH_FULFILLED',
+            payload: error
+        });
     }
 
 }
